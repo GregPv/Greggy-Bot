@@ -6,7 +6,8 @@ from discord.ext import commands
 from discord import app_commands
 import asyncio
 
-FFMPEG_PATH = r'Z:\FFmpeg\ffmpeg.exe'
+FFMPEG_PATH = r'F:\ffmpeg\ffmpeg-master-latest-win64-gpl\bin\ffmpeg.exe'
+
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
