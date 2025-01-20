@@ -30,7 +30,10 @@ ydl_opts = {
 
 @bot.tree.command(name="ping", description="Responds with Pong!")
 async def ping(interaction: discord.Interaction):
-    await interaction.response.send_message("Pong!")
+    try:
+        await interaction.response.send_message("Pong!")
+    except discord.errors.NotFound:
+        print("Interaction expired before responding.")
 
 @bot.event
 async def on_ready():
@@ -73,7 +76,7 @@ async def play(ctx, *, query):
     try:
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(f"ytsearch:{query}", download=False)['entries'][0]
-        url = info['url']  # dumbass no formatting [FORMATS]
+        url = info['url']  # no formatting [FORMATS]
         
         ctx.voice_client.stop()
         
@@ -82,7 +85,7 @@ async def play(ctx, *, query):
             'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
         }
         
-        ctx.voice_client.play(discord.FFmpegPCMAudio(url, executable=FFMPEG_PATH, **FFMPEG_OPTIONS))
+        ctx.voice_client.play(discord.FFmpegOpusAudio(url, executable=FFMPEG_PATH, **FFMPEG_OPTIONS))
         await ctx.send(f"Now playing: {info['title']}")
     except Exception as e:
         await ctx.send(f"An error occurred while searching for the song: {str(e)}")
